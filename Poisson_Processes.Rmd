@@ -1,0 +1,59 @@
+---
+title: "Poisson Processes"
+author: "Tom Caputo"
+date: "Friday, September 25, 2015"
+output: html_document
+---
+#####What is a Poisson Processes?
+A poisson processes is a stochastic proceses that counts the arrival of a number of events in a given time interval. We use a poisson processes in situations where we a counting the occurances of a particular event that appear to happen a certain rate. For example:
+
+- Number of times your car will break
+- Number of users visiting a website
+- Arrival times of train
+
+These processes must be random (not following a deterministic structure). So pretty much, like all random variables there has to be an unpredictability to it.
+
+#####Mathmatical Definition
+
+Poisson processes a characterizzed by two parameters...
+
+$\lambda$: The rate of occurance. (sometimes called the intensity)
+
+$\tau$: The interval
+
+...and follows a Poisson distribution with associated pearameters $\lambda\tau$.
+
+$P[N(t + \tau) - N(t) = k] = \frac{e^{-\lambda\tau}(\lambda\tau)^k}{k!}$
+
+Let's simulate some Count data
+
+```{r,  warning=FALSE}
+poisson_data <- rpois(n = 200, lambda = 10)
+
+hist(poisson_data, main = "Poisson Data", xlab = "", breaks = 50)
+
+#Variance = Mean in Poisson Distributed Data
+mean(poisson_data)
+var(poisson_data)
+```
+
+ As $\lambda$ approaches 30 and beyond, the distribution starts to look a lot like the Normal Distribution. This is because $Poisson(30)$ can be thought of the aggregate of 30 poisson variables and thus can be considered Normally distributed according to the Central Limit Theorem. Don't believe me? Look at these Graphs
+
+```{r warning=FALSE, message = FALSE}
+library(ggplot2)
+pois.data <- rbind(
+  data.frame(lambda = "lambda = 1", data.pois = rpois(n=200, lambda =1)),
+  data.frame(lambda = "lambda = 5", data.pois = rpois(n=200, lambda =5)),
+  data.frame(lambda = "lambda = 15", data.pois = rpois(n=200, lambda =15)),
+  data.frame(lambda = "lambda = 30", data.pois = rpois(n=200, lambda =30))
+)
+
+ggplot(data = pois.data) +
+  ggtitle("Poisson Distribution with Different Rates(Lambda)") +
+  geom_histogram(aes(x = data.pois) ) +
+#   scale_x_discrete(breaks = 1) +
+  xlab("") +
+  ylab("Instances") +
+  facet_wrap(~lambda)
+```
+
