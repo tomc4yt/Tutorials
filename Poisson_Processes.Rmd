@@ -50,10 +50,23 @@ pois.data <- rbind(
 
 ggplot(data = pois.data) +
   ggtitle("Poisson Distribution with Different Rates(Lambda)") +
-  geom_histogram(aes(x = data.pois) ) +
+  geom_density(aes(x = data.pois) ) +
 #   scale_x_discrete(breaks = 1) +
   xlab("") +
   ylab("Instances") +
   facet_wrap(~lambda)
 ```
+
+#####Non-Stationary Poisson Processes
+
+Non-Stationary Poisson processes, sometimes called inhomogenous poisson process, is a poisson processes with a variable rate $\lambda$. This occurs often in time dependent processes. For example imagine a the rate a customer arrives a grocery store. Early morning the rate is low and increases throughout the day. As the time gets closer to midnight/closing time the rate customers arrives decreases. 
+
+The rate $(\lambda)
+$N_{a,b} = \int_{a}^{b} \lambda(\tau)d\tau$
+
+
+
+
+
+
 
