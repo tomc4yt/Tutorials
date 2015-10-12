@@ -1,0 +1,39 @@
+---
+title: "Retrieving American Survey Data"
+author: "Tom"
+date: "October 6, 2015"
+output: html_document
+---
+
+### Code for Retrieving Data from the American Community Survey
+
+Make sure to request a key from the Census website: http://api.census.gov/data/key_signup.html
+
+
+```{r, eval = FALSE}
+library(reshape2)
+library(plyr)
+library(dplyr)
+library(acs)
+
+Census_key <- # YOUR KEY. Get it from the Census API
+
+api.key.install(key=Census.key)
+
+# Make Your Geometry, Here I use all census tracts in Washngton DC
+geo.DC <- geo.make(state = 11, county = 001, tract = "*")
+
+
+# Function to get ACS Data
+get_ACS_Data <- function(geometry, table){
+  acs_data <- acs.fetch(geo = geometry, table.number=table, 
+                        endyear = 2013, span = 5, col.names = "pretty" )
+  acs_data <- data.frame(estimate(acs_data))
+  return(acs_data)
+}
+
+# Write to file
+write.csv(acs_data, "ACS_Data.csv")
+```
+
+
