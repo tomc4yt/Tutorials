@@ -1,0 +1,70 @@
+---
+title: "kNN"
+author: "Tom"
+date: "October 20, 2015"
+output: html_document
+---
+#Knn (k-Nearest-Neighbors)
+
+This is an example of knn classification from a class I took. kNN is an algorithm that makes predictions based off of the nearest points. The scientist must specify the parameter k, which is the number of clusters the algorithm will assume are present. 
+
+###Setup
+```{r}
+library(ggplot2)
+library(class)
+library(plyr)
+library(dplyr)
+```
+
+
+###Read Data and produce summary statistics
+```{r}
+iris <- read.csv(url("http://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data"), header = F)
+names(iris) <- c("Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width", "Species")
+
+
+summary(iris)
+```
+
+###Descriptive Plots
+
+```{r}
+
+pl <- ggplot(data = iris) +
+  geom_point(aes(x = Sepal.Width,y = Sepal.Length, colour = Species))
+
+print(pl)
+
+pl <- ggplot(data = iris) +
+  geom_point(aes(x = Petal.Width,y = Petal.Length, colour = Species))
+
+print(pl)
+```
+
+
+###Create kNN Model
+```{r}
+set.seed(55)
+
+# Splitting the data into training and test (this line finds indeces for split)
+ind <- sample(2, nrow(iris), replace = T, prob = c(0.67, .33))
+
+# Training Data
+iris.training <- iris[ind == 1, 1:4]
+
+# Test Data
+iris.test <- iris[ind == 2, 1:4]
+
+# Labels (Species) 
+iris.training.labels <- iris[ind == 1, 5]
+iris.test.labels <- iris[ind == 2, 5]
+
+iris.pred <- knn(iris.training, iris.test, cl = iris.training.labels, k =3)
+iris.pred
+
+library(gmodels)
+CrossTable(x = iris.test.labels, y = iris.pred, prop.chisq = F)
+```
+
+
+
